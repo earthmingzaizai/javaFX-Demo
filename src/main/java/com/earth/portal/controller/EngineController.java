@@ -1,6 +1,7 @@
 package com.earth.portal.controller;
 
 import com.earth.portal.enums.LoadComponent;
+import javafx.application.Platform;
 import javafx.scene.web.WebView;
 
 import java.io.*;
@@ -21,10 +22,14 @@ public class EngineController extends BaseController{
         webView.getEngine().setOnAlert(e -> {
             System.out.println(e.getData());
         });
-        getJarDirectory("htmlView", "res");
-        URL resource = getClass().getResource("/");
-        //createResDir(resource.toURI(), "res");
-        webView.getEngine().load(getClass().getResource("/htmlView/index.html").toString());
+        Platform.runLater(() -> {
+            File htmlDir = null;
+            try {
+                htmlDir = getJarDirectory("webEngineSource", "res");
+            } catch (Exception e) {e.printStackTrace();}
+            //加载本地html必须要有file:\\前缀
+            webView.getEngine().load(new File(htmlDir, "webEngineSource/htmlView/index.html").toURI().toString());
+        });
     }
 
     /**
@@ -44,8 +49,7 @@ public class EngineController extends BaseController{
             File file = queue.poll();
             if(file.isDirectory()) {
                 File[] files = file.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    File child = files[i];
+                for (File child : files) {
                     queue.put(child);
                 }
             }
@@ -56,11 +60,14 @@ public class EngineController extends BaseController{
      * 获取jar中文件夹
      * @throws Exception
      */
-    private void getJarDirectory(String sourcePath, String desPath) throws Exception {
+    private File getJarDirectory(String sourcePath, String desPath) throws Exception {
         String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         JarFile localJarFile = new JarFile(new File(path));
         File res = new File(new File(path).getParentFile(), desPath);
-        boolean a = res.exists() ? false : res.mkdirs();
+        if(res.exists()) {
+            return res;
+        }
+        res.mkdirs();
         Enumeration<JarEntry> entries = localJarFile.entries();
         while (entries.hasMoreElements()) {
             JarEntry jarEntry = entries.nextElement();
@@ -79,5 +86,6 @@ public class EngineController extends BaseController{
                 }
             }
         }
+        return res;
     }
 }
