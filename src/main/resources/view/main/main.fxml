@@ -55,7 +55,8 @@
                            </Label>
                        </body>
                        <actions>
-                           <JFXButton fx:id="acceptButton" styleClass="dialog-accept">同意
+                           <JFXButton fx:id="acceptButton" styleClass="dialog-accept">
+                               同意
                            </JFXButton>
                        </actions>
                    </JFXDialogLayout>

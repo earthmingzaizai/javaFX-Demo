@@ -2,12 +2,15 @@ package com.earth.portal;
 
 import com.earth.portal.controller.MainController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -26,6 +29,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 600, 500);
         primaryStage.setTitle("FXML Welcome");
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest(e -> {Platform.exit();});
         primaryStage.show();
     }
 }
