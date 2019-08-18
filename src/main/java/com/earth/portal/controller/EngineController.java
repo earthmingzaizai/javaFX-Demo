@@ -4,11 +4,10 @@ import com.earth.portal.enums.LoadComponent;
 import javafx.application.Platform;
 import javafx.scene.web.WebView;
 
-import java.io.*;
-import java.net.URI;
-import java.net.URL;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Enumeration;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -19,41 +18,17 @@ public class EngineController extends BaseController{
     @LoadComponent
     public void initEngine() throws Exception {
         webView.getEngine().setJavaScriptEnabled(true);
-        webView.getEngine().setOnAlert(e -> {
-            System.out.println(e.getData());
-        });
-        Platform.runLater(() -> {
-            File htmlDir = null;
-            try {
-                htmlDir = getJarDirectory("webEngineSource", "res");
-            } catch (Exception e) {e.printStackTrace();}
-            //加载本地html必须要有file:\\前缀
-            webView.getEngine().load(new File(htmlDir, "webEngineSource/htmlView/index.html").toURI().toString());
-        });
+        webView.getEngine().setOnAlert(e -> System.out.println(e.getData()));
+        Platform.runLater(this::loadEngine);
     }
 
-    /**
-     * 初始化
-     * @param des
-     * @param res
-     * @throws Exception
-     */
-    private void createResDir(URI des, String res) throws Exception {
-        File dir = new File(new File(des).getParentFile().getAbsolutePath());
-        LinkedBlockingQueue<File> queue = new LinkedBlockingQueue<File>(){@Override public void put(File file) throws InterruptedException {super.put(file);System.out.println(file);}};
-        if(!dir.exists()){
-            dir.mkdirs();
-        }
-        queue.put(dir);
-        while (queue.size() > 0) {
-            File file = queue.poll();
-            if(file.isDirectory()) {
-                File[] files = file.listFiles();
-                for (File child : files) {
-                    queue.put(child);
-                }
-            }
-        }
+    private void loadEngine() {
+        File htmlDir = null;
+        try {
+            htmlDir = getJarDirectory("webEngineSource", "res");
+        } catch (Exception e) {e.printStackTrace();}
+        //加载本地html必须要有file:\\前缀
+        webView.getEngine().load(new File(htmlDir, "htmlView/index.html").toURI().toString());
     }
 
     /**
@@ -62,6 +37,9 @@ public class EngineController extends BaseController{
      */
     private File getJarDirectory(String sourcePath, String desPath) throws Exception {
         String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        if(new File(path).isDirectory()) {
+            return new File(getClass().getResource("/" + sourcePath).toURI());
+        }
         JarFile localJarFile = new JarFile(new File(path));
         File res = new File(new File(path).getParentFile(), desPath);
         if(res.exists()) {
@@ -86,6 +64,6 @@ public class EngineController extends BaseController{
                 }
             }
         }
-        return res;
+        return new File(res, sourcePath);
     }
 }

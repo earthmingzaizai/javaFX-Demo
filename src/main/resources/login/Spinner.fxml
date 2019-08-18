@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane fx:controller="com.earth.portal.controller.LoadingController" fx:id="root" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1">
+    <JFXSpinner styleClass="materialDesign-purple, first-spinner" startingAngle="-40"/>
+    <JFXSpinner styleClass="materialDesign-blue, second-spinner" startingAngle="-90"/>
+    <JFXSpinner styleClass="materialDesign-cyan, third-spinner" startingAngle="-120"/>
+    <JFXSpinner styleClass="materialDesign-green, fourth-spinner" startingAngle="-150"/>
+    <JFXSpinner styleClass="materialDesign-yellow, fifth-spinner" startingAngle="-180"/>
+    <JFXSpinner styleClass="materialDesign-orange, sixth-spinner" startingAngle="-210"/>
+    <JFXSpinner styleClass="materialDesign-red, seventh-spinner" startingAngle="-240"/>
+
+    <children>
+        <JFXNodesList fx:id="nodesList" rotate="180.0" spacing="15"
+                      StackPane.alignment="BOTTOM_RIGHT">
+            <children>
+                <JFXButton fx:id="newButton" contentDisplay="GRAPHIC_ONLY"
+                           styleClass="main-button">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PLUS" size="24" styleClass="main-icon"/>
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="fileButton" contentDisplay="GRAPHIC_ONLY" onAction="#onNewFile" styleClass="animated-option-button">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="FILE_TEXT" size="24"
+                                             styleClass="sub-icon" />
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="commentButton" contentDisplay="GRAPHIC_ONLY" onAction="#onNewComment" styleClass="animated-option-button">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="COMMENT" size="24" styleClass="sub-icon" />
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="filterButton" contentDisplay="GRAPHIC_ONLY" onAction="#onNewFilter" styleClass="animated-option-button">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="FILTER" size="24" styleClass="sub-icon" />
+                    </graphic>
+                </JFXButton>
+            </children>
+            <StackPane.margin>
+                <Insets bottom="50.0" right="50.0" />
+            </StackPane.margin>
+        </JFXNodesList>
+    </children>
+
+    <JFXDialog fx:id="dialog">
+        <JFXDialogLayout>
+            <heading>
+                <Label>JFoenix Dialog</Label>
+            </heading>
+            <body>
+                <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                    enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                    nisi ut aliquip ex ea commodo consequat.
+                </Label>
+            </body>
+            <actions>
+                <JFXButton fx:id="acceptButton" styleClass="dialog-accept">ACCEPT
+                </JFXButton>
+            </actions>
+        </JFXDialogLayout>
+    </JFXDialog>
+</StackPane>
